@@ -3,6 +3,8 @@ from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 
 from api.apps.authentication.serializers.jwt import MyTokenObtainPairSerializer
 
+app_name = "authentication"
+
 urlpatterns = [
     path(
         "token/",

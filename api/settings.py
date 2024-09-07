@@ -11,8 +11,8 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 """
 
 import ast
-from datetime import timedelta
 import os
+from datetime import timedelta
 from pathlib import Path
 
 from dotenv import load_dotenv
@@ -55,6 +55,7 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "api.apps.authentication.apps.AuthenticationConfig",
+    "api.apps.order.apps.OrderConfig",
 ]
 
 AUTH_USER_MODEL = "authentication.User"
@@ -182,7 +183,6 @@ REST_FRAMEWORK = {
         "api.apps.authentication.auth.ClientJWTAuthentication",
     ),
     "DEFAULT_RENDERER_CLASSES": ("rest_framework.renderers.JSONRenderer",),
-    "DEFAULT_SCHEMA_CLASS": "drf_spectacular.openapi.AutoSchema",
 }
 
 AWS_DEFAULT_ACL = None
