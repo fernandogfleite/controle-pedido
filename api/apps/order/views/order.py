@@ -27,14 +27,18 @@ from api.apps.order.serializers.order import (
 class ClientMixin:
     permission_classes = [permissions.IsAuthenticated]
 
+    def initial(self, request, *args, **kwargs):
+        super().initial(request, *args, **kwargs)
+        self.client_id = request.auth.get("client_id")
+
     def get_queryset(self):
-        return self.queryset.filter(client=self.request.auth.get("client_id"))
+        return self.queryset.filter(client=self.client_id).order_by("id")
 
     def perform_create(self, serializer):
-        serializer.save(client_id=self.request.auth.get("client_id"))
+        serializer.save(client_id=self.client_id)
 
     def perform_update(self, serializer):
-        serializer.save(client_id=self.request.auth.get("client_id"))
+        serializer.save(client_id=self.client_id)
 
 
 class TableViewSet(ClientMixin, ModelViewSet):
