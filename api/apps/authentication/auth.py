@@ -16,4 +16,4 @@ class ClientJWTAuthentication(JWTAuthentication):
         if not user.clients.filter(id=token_client_id).exists():
             raise AuthenticationFailed("Invalid client.")
 
-        return (user, token)
+        return user, token
