@@ -5,6 +5,7 @@ from rest_framework.mixins import (
     RetrieveModelMixin,
 )
 from rest_framework.viewsets import GenericViewSet, ModelViewSet
+from api.apps.authentication.auth import ClientJWTAuthentication
 
 from api.apps.order.models.order import (
     Dish,
@@ -26,6 +27,11 @@ from api.apps.order.serializers.order import (
 
 class ClientMixin:
     permission_classes = [permissions.IsAuthenticated]
+    authentication_classes = [ClientJWTAuthentication]
+
+    def __init__(self):
+        super().__init__()
+        self.client_id = None
 
     def initial(self, request, *args, **kwargs):
         super().initial(request, *args, **kwargs)
