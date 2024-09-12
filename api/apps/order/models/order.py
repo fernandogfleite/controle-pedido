@@ -57,7 +57,7 @@ class Table(Base):
 
     number = models.IntegerField()
     description = models.TextField()
-    status = models.CharField(max_length=10, choices=STATUS_CHOICES, default=AVAILABLE)
+    status = models.CharField(max_length=11, choices=STATUS_CHOICES, default=AVAILABLE)
     client = models.ForeignKey("authentication.Client", on_delete=models.PROTECT)
 
     class Meta:
@@ -96,7 +96,7 @@ class Dish(Base):
 
     name = models.CharField(max_length=255)
     description = models.TextField()
-    status = models.CharField(max_length=10, choices=STATUS_CHOICES, default=AVAILABLE)
+    status = models.CharField(max_length=11, choices=STATUS_CHOICES, default=AVAILABLE)
     price = models.DecimalField(max_digits=10, decimal_places=2)
     client = models.ForeignKey("authentication.Client", on_delete=models.PROTECT)
 
@@ -164,8 +164,12 @@ class OrderDish(Base):
     dish = models.ForeignKey(Dish, on_delete=models.PROTECT)
     client = models.ForeignKey("authentication.Client", on_delete=models.PROTECT)
     quantity = models.IntegerField()
-    additional_ingredient = models.ManyToManyField(Ingredient, blank=True)
-    removed_ingredient = models.ManyToManyField(Ingredient, blank=True)
+    additional_ingredient = models.ManyToManyField(
+        Ingredient, blank=True, related_name="additional_ingredient"
+    )
+    removed_ingredient = models.ManyToManyField(
+        Ingredient, blank=True, related_name="removed_ingredient"
+    )
     description = models.TextField(blank=True)
 
     class Meta:
