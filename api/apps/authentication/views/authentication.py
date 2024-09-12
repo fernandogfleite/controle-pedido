@@ -1,13 +1,14 @@
-# from rest_framework import permissions, views
-# from rest_framework.response import Response
+from rest_framework import generics, mixins, permissions
+from rest_framework.response import Response
 
-# from api.apps.authentication.permissions import IsClientUser
+from api.apps.authentication.mixins import ClientMixin
+from api.apps.authentication.models.client import User
+from api.apps.authentication.serializers.authentication import UserSerializer
 
 
-# class MyView(views.APIView):
-#     permission_classes = [permissions.IsAuthenticated]
+class RetriveMeView(ClientMixin, generics.RetrieveAPIView):
+    queryset = User.objects.all()
+    serializer_class = UserSerializer
 
-#     def get(self, request):
-#         client_id = request.auth.get("client_id")
-
-#         return Response({"message": f"Your client_id is {client_id}"})
+    def get_object(self):
+        return self.request.user
