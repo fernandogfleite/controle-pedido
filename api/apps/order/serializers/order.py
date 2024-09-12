@@ -9,6 +9,7 @@ from api.apps.order.models.order import (
     Table,
 )
 from api.apps.order.serializers.fields.order import (
+    CustomChoiceField,
     DishField,
     IngredientField,
     OrderField,
@@ -16,9 +17,11 @@ from api.apps.order.serializers.fields.order import (
 
 
 class TableSerializer(serializers.ModelSerializer):
+    status = CustomChoiceField(choices=Table.STATUS_CHOICES)
+
     class Meta:
         model = Table
-        fields = ("id", "name", "status", "description")
+        fields = ("id", "number", "status", "description")
 
 
 class IngredientSerializer(serializers.ModelSerializer):

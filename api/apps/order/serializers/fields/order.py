@@ -64,3 +64,20 @@ class OrderField(SaasRelatedField):
             "description": value.description,
             "created_by": value.created_by,
         }
+
+
+class CustomChoiceField(serializers.ChoiceField):
+    def to_representation(self, obj):
+        if (obj == "" and self.allow_blank) or (obj is None):
+            return None
+
+        return {"value": obj, "label": self._choices[obj]}
+
+    def to_internal_value(self, data):
+        if data == "" and self.allow_blank:
+            return None
+
+        try:
+            return self.choice_strings_to_values[str(data)]
+        except KeyError:
+            self.fail("invalid_choice", input=data)
