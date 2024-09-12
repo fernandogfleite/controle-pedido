@@ -5,8 +5,9 @@ from rest_framework.mixins import (
     RetrieveModelMixin,
 )
 from rest_framework.viewsets import GenericViewSet, ModelViewSet
-from api.apps.authentication.auth import ClientJWTAuthentication
 
+from api.apps.authentication.auth import ClientJWTAuthentication
+from api.apps.authentication.mixins import ClientMixin
 from api.apps.order.models.order import (
     Dish,
     Ingredient,
@@ -23,28 +24,6 @@ from api.apps.order.serializers.order import (
     OrderSerializer,
     TableSerializer,
 )
-
-
-class ClientMixin:
-    permission_classes = [permissions.IsAuthenticated]
-    authentication_classes = [ClientJWTAuthentication]
-
-    def __init__(self):
-        super().__init__()
-        self.client_id = None
-
-    def initial(self, request, *args, **kwargs):
-        super().initial(request, *args, **kwargs)
-        self.client_id = request.auth.get("client_id")
-
-    def get_queryset(self):
-        return self.queryset.filter(client=self.client_id).order_by("id")
-
-    def perform_create(self, serializer):
-        serializer.save(client_id=self.client_id)
-
-    def perform_update(self, serializer):
-        serializer.save(client_id=self.client_id)
 
 
 class TableViewSet(ClientMixin, ModelViewSet):
